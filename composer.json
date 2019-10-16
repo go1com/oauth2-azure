@@ -1,5 +1,5 @@
 {
-    "name": "go1/oauth2-azure",
+    "name": "go1com/oauth2-azure",
     "description": "Microsoft Azure OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
     "type": "library",
     "require": {
