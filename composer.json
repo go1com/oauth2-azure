@@ -20,5 +20,10 @@
             "name": "Jared Fraser",
             "email": "jared.fraser@go1.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Go1\\OAuth2\\Client\\": "src/"
+        }
+    }
 }
