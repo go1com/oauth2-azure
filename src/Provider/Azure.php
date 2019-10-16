@@ -1,10 +1,10 @@
 <?php
 namespace Go1\OAuth2\Client\Provider;
 
+use Go1\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
-use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
@@ -110,5 +110,48 @@ class Azure extends AbstractProvider
     protected function createResourceOwner(array $response, AccessToken $token)
     {
         return new GenericResourceOwner($response, $response['oid']);
+    }
+
+    protected function createAccessToken(array $response, AbstractGrant $grant)
+    {
+        return new AccessToken($response, $this);
+    }
+
+    /**
+     * Get JWT verification keys from Azure Active Directory.
+     *
+     * @return array
+     */
+    public function getJwtVerificationKeys()
+    {
+        $factory = $this->getRequestFactory();
+        $request = $factory->getRequestWithOptions('get', 'https://login.windows.net/common/discovery/keys', []);
+        $response = $this->getParsedResponse($request);
+        $keys = [];
+        foreach ($response['keys'] as $keyinfo) {
+            if (isset($keyinfo['x5c']) && is_array($keyinfo['x5c'])) {
+                foreach ($keyinfo['x5c'] as $encodedkey) {
+                    $cert =
+                        '-----BEGIN CERTIFICATE-----' . PHP_EOL
+                        . chunk_split($encodedkey, 64, PHP_EOL)
+                        . '-----END CERTIFICATE-----' . PHP_EOL;
+                    $certObject = openssl_x509_read($cert);
+                    if ($certObject === false) {
+                        throw new \RuntimeException('An attempt to read ' . $encodedkey . ' as a certificate failed.');
+                    }
+                    $pkeyObject = openssl_pkey_get_public($certObject);
+                    if ($pkeyObject === false) {
+                        throw new \RuntimeException('An attempt to read a public key from a ' . $encodedkey . ' certificate failed.');
+                    }
+                    $pkeyArray = openssl_pkey_get_details($pkeyObject);
+                    if ($pkeyArray === false) {
+                        throw new \RuntimeException('An attempt to get a public key as an array from a ' . $encodedkey . ' certificate failed.');
+                    }
+                    $publicKey = $pkeyArray ['key'];
+                    $keys[$keyinfo['kid']] = $publicKey;
+                }
+            }
+        }
+        return $keys;
     }
 }
