@@ -1,0 +1,24 @@
+{
+    "name": "go1/oauth2-azure",
+    "description": "Microsoft Azure OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
+    "type": "library",
+    "require": {
+        "league/oauth2-client": "^2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3",
+        "mockery/mockery": "^1.2"
+    },
+    "config": {
+        "platform": {
+            "php": "7.1.0"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jared Fraser",
+            "email": "jared.fraser@go1.com"
+        }
+    ]
+}
