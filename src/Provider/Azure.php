@@ -1,10 +1,11 @@
 <?php
 namespace Go1\OAuth2\Client\Provider;
 
-use Go1\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Grant\AbstractGrant;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
+use League\OAuth2\Client\Token\AccessToken as LeagueAccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
@@ -79,7 +80,7 @@ class Azure extends AbstractProvider
         return $openIdConfiguration['token_endpoint'];
     }
 
-    public function getResourceOwnerDetailsUrl(AccessToken $token)
+    public function getResourceOwnerDetailsUrl(LeagueAccessToken $token)
     {
         return null;
     }
@@ -107,7 +108,7 @@ class Azure extends AbstractProvider
         }
     }
 
-    protected function createResourceOwner(array $response, AccessToken $token)
+    protected function createResourceOwner(array $response, LeagueAccessToken $token)
     {
         return new GenericResourceOwner($response, $response['oid']);
     }
