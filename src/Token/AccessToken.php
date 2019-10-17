@@ -45,15 +45,15 @@ class AccessToken extends LeagueAccessToken
                 // Additional validation is being performed in firebase/JWT itself
                 throw new RuntimeException('The id_token is invalid!');
             }
-            if ('common' == $provider->tenant) {
+            if ('common' === $provider->tenant) {
                 $provider->tenant = $idTokenClaims['tid'];
-                $tenant = $provider->getTenantDetails($provider->tenant);
-                if ($idTokenClaims['iss'] != $tenant['issuer']) {
+                $tenant = $provider->getOpenIdConfiguration($provider->tenant, $provider->b2cPolicy);
+                if ($idTokenClaims['iss'] !== $tenant['issuer']) {
                     throw new RuntimeException('Invalid token issuer!');
                 }
             } else {
-                $tenant = $provider->getTenantDetails($provider->tenant);
-                if ($idTokenClaims['iss'] != $tenant['issuer']) {
+                $tenant = $provider->getOpenIdConfiguration($provider->tenant, $provider->b2cPolicy);
+                if ($idTokenClaims['iss'] !== $tenant['issuer']) {
                     throw new RuntimeException('Invalid token issuer!');
                 }
             }
