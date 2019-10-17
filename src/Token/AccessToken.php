@@ -2,6 +2,7 @@
 namespace Go1\OAuth2\Client\Token;
 
 use Firebase\JWT\JWT;
+use Go1\OAuth2\Client\Provider\Azure;
 use League\OAuth2\Client\Token\AccessToken as LeagueAccessToken;
 use RuntimeException;
 
@@ -13,7 +14,7 @@ class AccessToken extends LeagueAccessToken
     protected $idToken;
     protected $idTokenClaims;
 
-    public function __construct(array $options, $provider)
+    public function __construct(array $options, Azure $provider)
     {
         parent::__construct($options);
 

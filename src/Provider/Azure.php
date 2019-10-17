@@ -119,6 +119,11 @@ class Azure extends AbstractProvider
         return new AccessToken($response, $this);
     }
 
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
     /**
      * Get JWT verification keys from Azure Active Directory.
      *
