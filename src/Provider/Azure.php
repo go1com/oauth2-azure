@@ -1,6 +1,7 @@
 <?php
 namespace Go1\OAuth2\Client\Provider;
 
+use Go1\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Grant\AbstractGrant;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
