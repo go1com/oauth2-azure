@@ -31,6 +31,15 @@ class AzureResourceOwner implements ResourceOwnerInterface
     {
         return $this->getValueByKey($this->response, 'oid');
     }
+
+    /**
+     * Get mail of resource owner
+     * @return string|null
+     */
+    public function getMail()
+    {
+        return $this->getValueByKey($this->reponse, 'mail');
+    }
     
     /**
      * Retrieve first name of resource owner
