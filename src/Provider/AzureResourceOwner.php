@@ -29,7 +29,7 @@ class AzureResourceOwner implements ResourceOwnerInterface
      */
     public function getId()
     {
-        return $this->getValueByKey($this->response, 'oid');
+        return $this->getValueByKey($this->response, 'id');
     }
 
     /**
@@ -47,7 +47,7 @@ class AzureResourceOwner implements ResourceOwnerInterface
      */
     public function getFirstName()
     {
-        return $this->getValueByKey($this->response, 'given_name');
+        return $this->getValueByKey($this->response, 'givenName');
     }
 
     /**
@@ -56,7 +56,7 @@ class AzureResourceOwner implements ResourceOwnerInterface
      */
     public function getLastName()
     {
-        return $this->getValueByKey($this->response, 'family_name');
+        return $this->getValueByKey($this->response, 'surname');
     }
 
     /**
@@ -65,7 +65,7 @@ class AzureResourceOwner implements ResourceOwnerInterface
      */
     public function getUpn()
     {
-        return $this->getValueByKey($this->response, 'upn');
+        return $this->getValueByKey($this->response, 'userPrincipalName');
     }
 
     /**
