@@ -38,7 +38,7 @@ class AzureResourceOwner implements ResourceOwnerInterface
      */
     public function getMail()
     {
-        return $this->getValueByKey($this->reponse, 'mail');
+        return $this->getValueByKey($this->response, 'mail');
     }
     
     /**
