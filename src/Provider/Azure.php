@@ -156,7 +156,7 @@ class Azure extends AbstractProvider
 
     protected function createResourceOwner(array $response, LeagueAccessToken $token)
     {
-        return new GenericResourceOwner($response, $response['oid']);
+        return new AzureResourceOwner($response);
     }
 
     protected function createAccessToken(array $response, AbstractGrant $grant)
