@@ -16,6 +16,8 @@ class Azure extends AbstractProvider
 
     public $tenant = 'common';
     public $b2cPolicy = null;
+    
+    protected $apiDomain = 'https://graph.microsoft.com/v1.0';
 
     protected $configurationUrlFormat = 'https://login.microsoftonline.com/%s/v2.0/.well-known/openid-configuration';
     protected $b2cConfigurationUrlFormat = 'https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=%s';
@@ -83,40 +85,7 @@ class Azure extends AbstractProvider
 
     public function getResourceOwnerDetailsUrl(LeagueAccessToken $token)
     {
-        return null;
-    }
-
-    protected function getDefaultScopes()
-    {
-        return [];
-    }
-
-    protected function checkResponse(ResponseInterface $response, $data)
-    {
-        if (isset($data['odata.error']) || isset($data['error'])) {
-            if (isset($data['odata.error']['message']['value'])) {
-                $message = $data['odata.error']['message']['value'];
-            } elseif (isset($data['error']['message'])) {
-                $message = $data['error']['message'];
-            } else {
-                $message = $response->getReasonPhrase();
-            }
-            throw new IdentityProviderException(
-                $message,
-                $response->getStatusCode(),
-                $response
-            );
-        }
-    }
-
-    protected function createResourceOwner(array $response, LeagueAccessToken $token)
-    {
-        return new GenericResourceOwner($response, $response['oid']);
-    }
-
-    protected function createAccessToken(array $response, AbstractGrant $grant)
-    {
-        return new AccessToken($response, $this);
+        return sprintf('%s/me', $this->apiDomain);
     }
 
     public function getClientId(): string
@@ -161,4 +130,39 @@ class Azure extends AbstractProvider
         }
         return $keys;
     }
+
+    protected function getDefaultScopes()
+    {
+        return [];
+    }
+
+    protected function checkResponse(ResponseInterface $response, $data)
+    {
+        if (isset($data['odata.error']) || isset($data['error'])) {
+            if (isset($data['odata.error']['message']['value'])) {
+                $message = $data['odata.error']['message']['value'];
+            } elseif (isset($data['error']['message'])) {
+                $message = $data['error']['message'];
+            } else {
+                $message = $response->getReasonPhrase();
+            }
+            throw new IdentityProviderException(
+                $message,
+                $response->getStatusCode(),
+                $response
+            );
+        }
+    }
+
+    protected function createResourceOwner(array $response, LeagueAccessToken $token)
+    {
+        return new AzureResourceOwner($response);
+    }
+
+    protected function createAccessToken(array $response, AbstractGrant $grant)
+    {
+        return new AccessToken($response, $this);
+    }
+
+    
 }
