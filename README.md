@@ -1,6 +1,6 @@
 # Azure Active Directory Provider for OAuth 2.0 Client
 
-[![Software License]](https://img.shields.io/github/license/go1com/oauth2-azure)
+[![Software License](https://img.shields.io/github/license/go1com/oauth2-azure)](https://github.com/go1com/oauth2-azure/blob/master/LICENSE)
 
 This package provide Microsoft Azure AD OAuth 2.0 support for the PHP League's [OAuth 2.0 Client](https://github.com/thephpleague/oauth2-client).
 
