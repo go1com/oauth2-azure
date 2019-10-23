@@ -83,6 +83,12 @@ class Azure extends AbstractProvider
         return $openIdConfiguration['token_endpoint'];
     }
 
+    public function getBaseJWTUrl()
+    {
+        $openIdConfiguration = $this->getOpenIdConfiguration($this->tenant, $this->b2cPolicy);
+        return $openIdConfiguration['jwks_uri'];
+    }
+
     public function getResourceOwnerDetailsUrl(LeagueAccessToken $token)
     {
         return sprintf('%s/me', $this->apiDomain);
@@ -100,8 +106,10 @@ class Azure extends AbstractProvider
      */
     public function getJwtVerificationKeys()
     {
+        $url = $this->getBaseJWTUrl();
+
         $factory = $this->getRequestFactory();
-        $request = $factory->getRequestWithOptions('get', 'https://login.windows.net/common/discovery/keys', []);
+        $request = $factory->getRequestWithOptions('get', $url, []);
         $response = $this->getParsedResponse($request);
         $keys = [];
         foreach ($response['keys'] as $keyinfo) {
@@ -126,6 +134,8 @@ class Azure extends AbstractProvider
                     $publicKey = $pkeyArray ['key'];
                     $keys[$keyinfo['kid']] = $publicKey;
                 }
+            } else {
+                $keys[$keyinfo['kid']] = $keyinfo;
             }
         }
         return $keys;
@@ -163,6 +173,4 @@ class Azure extends AbstractProvider
     {
         return new AccessToken($response, $this);
     }
-
-    
 }
