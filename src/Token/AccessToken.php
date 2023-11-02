@@ -2,6 +2,7 @@
 namespace Go1\OAuth2\Client\Token;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Go1\OAuth2\Client\Provider\Azure;
 use League\OAuth2\Client\Token\AccessToken as LeagueAccessToken;
 use RuntimeException;
@@ -26,7 +27,7 @@ class AccessToken extends LeagueAccessToken
                 $tks = explode('.', $this->idToken);
                 // Check if the id_token contains signature
                 if (3 == count($tks) && !empty($tks[2])) {
-                    $idTokenClaims = (array)JWT::decode($this->idToken, $keys, ['RS256']);
+                    $idTokenClaims = (array)JWT::decode($this->idToken, new Key($keys, 'RS256'));
                 } else {
                     // The id_token is unsigned (coming from v1.0 endpoint) - https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
                     // Since idToken is not signed, we just do OAuth2 flow without validating the id_token
